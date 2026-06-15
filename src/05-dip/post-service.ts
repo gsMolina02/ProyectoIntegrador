@@ -6,23 +6,22 @@
  * en lugar de una abstracción.
  */
 
-import { LocalDatabaseService } from '../data/local-database';
+export interface DatabaseProvider {
+    getPosts(): Promise<Post[]>;
+}
+
+export interface Post {
+    id: number;
+    title: string;
+    body: string;
+}
 
 export class PostService {
 
-    private posts: any[] = [];
+    constructor(private readonly databaseProvider: DatabaseProvider) {}
 
     async getPosts() {
-        /**
-         * VIOLACIÓN: Instanciación directa de una dependencia.
-         * No podemos inyectar un proveedor diferente (como JsonDatabaseService)
-         * sin modificar el constructor o este método. 
-         * El nivel superior (PostService) depende del nivel inferior (LocalDatabaseService).
-         */
-        const databaseProvider = new LocalDatabaseService();
-        this.posts = await databaseProvider.getFakePosts();
-
-        return this.posts;
+        return this.databaseProvider.getPosts();
     }
 
 }
