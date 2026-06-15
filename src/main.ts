@@ -1,5 +1,5 @@
 import './style.css'
-import './03-lsp/lsp-demo'
+import './04-isp/isp-demo'
 
 const app = document.querySelector<HTMLDivElement>('#app')!
 
