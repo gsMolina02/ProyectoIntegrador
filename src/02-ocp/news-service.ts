@@ -1,32 +1,41 @@
 
 /**
- * VIOLACIÓN AL PRINCIPIO DE ABIERTO/CERRADO (OCP)
- * 
- * En este módulo de noticias de la reserva, el servicio depende directamente
- * de la librería externa 'axios'. Si quisiéramos usar 'fetch' u otra librería,
- * tendríamos que modificar este código interno.
+ * REFCTOR OCP: el servicio depende de una abstracción HTTP y no de un cliente concreto.
+ * Si mañana queremos migrar de fetch a axios, solo cambiaría el adaptador.
  */
 
-import axios from 'axios';
+import { HttpClient } from './http-client';
+
+export interface NewsItem {
+    id: number;
+    title: string;
+    body: string;
+}
+
+export interface PhotoItem {
+    id: number;
+    title: string;
+    url: string;
+    thumbnailUrl: string;
+}
 
 export class NewsService {
 
-    // VIOLACIÓN: Dependencia rígida de axios.get()
-    // Si la API cambia o queremos cambiar de cliente HTTP, este código debe "abrirse" para modificación.
+    constructor(private readonly httpClient: HttpClient) {}
+
     async getLatestNews() {
         console.log('Obteniendo noticias de la reserva biológica...');
-        const resp = await axios.get('https://jsonplaceholder.typicode.com/posts');
-        return resp.data;
+        return this.httpClient.get<NewsItem[]>('https://jsonplaceholder.typicode.com/posts');
     }
 
 }
 
 export class PhotosService {
 
+    constructor(private readonly httpClient: HttpClient) {}
+
     async getGallery() {
-        // Otra violación repetida: si mañana axios desaparece, tenemos que buscar todos los archivos que lo usan.
-        const resp = await axios.get('https://jsonplaceholder.typicode.com/photos');
-        return resp.data;
+        return this.httpClient.get<PhotoItem[]>('https://jsonplaceholder.typicode.com/photos');
     }
 
 }
