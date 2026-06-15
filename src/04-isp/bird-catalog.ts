@@ -6,34 +6,38 @@
  * a implementar métodos que no les corresponden según su naturaleza.
  */
 
-interface Bird {
+export interface Eatable {
     eat(): void;
+}
+
+export interface Flyable {
     fly(): void;
+}
+
+export interface Swimmable {
     swim(): void;
 }
 
-export class Toucan implements Bird {
+export class Toucan implements Eatable, Flyable {
     public eat() { console.log('El Tucán está comiendo frutas.'); }
     public fly() { console.log('El Tucán vuela sobre la selva.'); }
-    public swim() { console.log('El Tucán no suele nadar, pero implemento el método vacío.'); }
 }
 
-export class Hummingbird implements Bird {
+export class Hummingbird implements Eatable, Flyable {
     public eat() { console.log('El Colibrí busca néctar.'); }
     public fly() { console.log('El Colibrí aletea rápidamente.'); }
-    public swim() { throw new Error('Un colibrí no puede nadar'); }
 }
 
 /**
- * VIOLACIÓN FLAGRANTE: El Avestruz es un ave, pero NO VUELA.
- * La interfaz Bird le obliga a implementar fly(), causando una excepción en tiempo de ejecución
- * o un comportamiento inesperado.
+ * El Pingüino solo implementa lo que realmente puede hacer.
+ * Ya no se ve obligado a declarar un fly() que termine lanzando errores.
  */
-export class Ostrich implements Bird {
+export class Penguin implements Eatable, Swimmable {
+    public eat() { console.log('El Pingüino come pescado.'); }
+    public swim() { console.log('El Pingüino nada con soltura.'); }
+}
+
+export class Ostrich implements Eatable, Swimmable {
     public eat() { console.log('El Avestruz come hierbas.'); }
-    public fly() { 
-        // ¡Error! Violación de ISP.
-        throw new Error('Las avestruces NO vuelan.'); 
-    }
     public swim() { console.log('El Avestruz puede nadar si es necesario.'); }
 }
