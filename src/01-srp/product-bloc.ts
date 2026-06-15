@@ -29,11 +29,6 @@ export class ProductBloc {
         this.products.push(product);
     }
 
-    // Responsabilidad 3: Envío de notificaciones (Servicio de Infraestructura)
-    // ESTA ES LA VIOLACIÓN: El Bloc no debería saber CÓMO enviar correos electrónicos.
-    notifyCustomer(email: string, message: string) {
-        console.log(`[Mailer] Enviando correo a ${email}: ${message}`);
-        // Lógica directa de envío de correo acoplada aquí
-    }
-
 }
+
+export type { Product };
